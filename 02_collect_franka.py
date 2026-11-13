@@ -1,5 +1,5 @@
 """Two Franka Panda arms fold a cloth in half; scripted demos recorded to disk."""
-import argparse, json, sys, time
+import argparse, json, os, sys, time
 from pathlib import Path
 import numpy as np
 
@@ -206,6 +206,21 @@ CAMS = {
 world.reset()
 for c in CAMS.values():
     c.initialize()
+
+# ---- optional high-res record camera (README / demo captures) -------------
+REC_DIR = os.environ.get("WAM_RECORD_DIR")
+REC_CAM = None
+if REC_DIR:
+    Path(REC_DIR).mkdir(parents=True, exist_ok=True)
+    REC_CAM = Camera(prim_path="/World/cam_record", resolution=(960, 540), frequency=CONTROL_HZ)
+    REC_CAM.set_world_pose(
+        np.array([1.10, 1.00, 0.90]),
+        rot_utils.euler_angles_to_quats(np.array([0, 21.9, -135.5]), degrees=True),
+        camera_axes="world",
+    )
+    REC_CAM.set_focal_length(2.25)   # ≈50° horizontal FOV (default 5.0 is telephoto)
+    REC_CAM.initialize()
+
 cloth = ClothPrim(prim_paths_expr=CLOTH_PATH, name="cloth")
 cloth.initialize()
 
@@ -377,7 +392,12 @@ def rollout(ep, world_pts, Pn, T=190):
     _fmt = lambda v: "none" if v is None else f"{v:.3f}"
     for t in range(T):
         imgs = grab_images(); st = get_state()
-        if ROLL_N <= 3 and t % 24 == 0:
+        if REC_CAM is not None:
+            _rr = REC_CAM.get_rgba()
+            if _rr is not None and np.size(_rr):
+                Image.fromarray(_np(_rr)[..., :3].astype(np.uint8)).save(
+                    Path(REC_DIR) / f"try{ROLL_N}_{t:03d}.jpg", quality=92)
+        if ROLL_N <= 3 and (os.environ.get("WAM_ROLLOUT_FRAMES") == "1" or t % 24 == 0):
             for cam, im in imgs.items():
                 Image.fromarray(im).save(f"/tmp/rollout/try{ROLL_N}_{cam}_{t:03d}.jpg")
         conn.send(("act", {"overhead": (imgs["overhead"].tobytes(), imgs["overhead"].shape),

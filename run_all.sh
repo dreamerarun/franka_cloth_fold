@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# One script for the whole pipeline. Save as /home/arun/wam/run_all.sh
+# One script for the whole pipeline. Run from anywhere: bash run_all.sh
 #
-#   bash /home/arun/wam/run_all.sh                 # everything: build, collect 200 eps, convert, train ACT
+#   bash run_all.sh                                # everything: build, collect 200 eps, convert, train ACT
 #   EPISODES=20 bash run_all.sh                    # smaller run
 #   POLICY=smolvla bash run_all.sh                 # train SmolVLA instead of ACT
 #   bash run_all.sh build|test|collect|convert|train   # run just one stage
@@ -9,9 +9,9 @@
 # Stop at any stage with Ctrl+C; re-running skips work that is already done.
 set -euo pipefail
 
-WAM=/home/arun/wam
-ISAAC=/home/arun/Downloads/isaac-sim-standalone-5.1.0-linux-x86_64
-CONDA_ENV=lerobot
+WAM="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ISAAC=${ISAAC:-$HOME/Downloads/isaac-sim-standalone-5.1.0-linux-x86_64}
+CONDA_ENV=${CONDA_ENV:-lerobot}
 EPISODES=${EPISODES:-200}
 POLICY=${POLICY:-act}                      # act | smolvla
 STAGE=${1:-all}
