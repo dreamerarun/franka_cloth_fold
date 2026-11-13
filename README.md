@@ -7,6 +7,7 @@
 [![Policy](https://img.shields.io/badge/policy-ACT-6f42c1)](https://arxiv.org/abs/2304.13705)
 [![License](https://img.shields.io/badge/license-MIT-2ea44f)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/dreamerarun/franka_cloth_fold?style=flat)](https://github.com/dreamerarun/franka_cloth_fold/stargazers)
+[![Release](https://img.shields.io/github/v/release/dreamerarun/franka_cloth_fold?label=checkpoint)](https://github.com/dreamerarun/franka_cloth_fold/releases/tag/v1.0-act)
 
 <p align="center">
   <img src="media/eval_fold.gif" width="720" alt="A trained ACT policy folding the cloth with two Franka arms">
@@ -90,9 +91,24 @@ all of them.
 - [Isaac Sim 5.1.0 standalone](https://developer.nvidia.com/isaac-sim) extracted somewhere, e.g.
   `~/Downloads/isaac-sim-standalone-5.1.0-linux-x86_64`.
 - A conda env with LeRobot **0.5.1** and a CUDA-enabled PyTorch (tested: `torch 2.7.1+cu126`).
-- A trained checkpoint at
+- The reference checkpoint at
   `outputs/train/wam_fold_act/checkpoints/last/pretrained_model`
-  (train it below, or use your own run).
+  (download below, or train your own run).
+
+### Reference checkpoint
+
+The 183 MB ACT checkpoint used for the gallery is published as a GitHub release:
+
+```bash
+mkdir -p outputs/train/wam_fold_act/checkpoints/last
+curl -L -o /tmp/act_wam_fold_act_pretrained_model.tar.gz \
+  https://github.com/dreamerarun/franka_cloth_fold/releases/download/v1.0-act/act_wam_fold_act_pretrained_model.tar.gz
+tar -xzf /tmp/act_wam_fold_act_pretrained_model.tar.gz \
+  -C outputs/train/wam_fold_act/checkpoints/last
+```
+
+Alternatively, run the full pipeline in [Full pipeline from scratch](#-full-pipeline-from-scratch)
+to produce the same directory.
 
 ### 0. Clone and set paths
 
