@@ -200,10 +200,11 @@ not part of the policy input.
 ### 1. Environment
 
 ```bash
-conda create -n lerobot python=3.11 -y
+conda create -n lerobot python=3.12 -y
 conda activate lerobot
 
-pip install "lerobot[act]==0.5.1"
+# ACT is part of LeRobot core — no extra needed
+pip install "lerobot==0.5.1"
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
 ```
 
@@ -265,7 +266,7 @@ ACT config: chunk size 30, 30 action steps, batch 8, 60k steps, checkpoints ever
 Output: `outputs/train/wam_fold_act/checkpoints/last/pretrained_model`.
 
 `04_train.sh smolvla` is also included (SmolVLA base + one empty camera), but the README results
-and the release/reference checkpoint use ACT.
+and the `v1.0-act` release uses ACT.
 
 ### 5. Evaluate
 
