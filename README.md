@@ -15,6 +15,12 @@
   <em>Reference ACT checkpoint — closed-loop rollout in Isaac Sim (recorded with the eval camera below).</em>
 </p>
 
+<p align="center">
+  <img src="media/eval_new_method_double_fold.gif" width="720" alt="Scripted expert: new double-fold method (low lift, rolling descent, pins every substep)">
+  <br>
+  <em>Scripted expert demonstration using `--line-pin --double-fold --pin-substeps --drag-fold --place-z 0.012`.</em>
+</p>
+
 This repo contains the **whole pipeline**: a scripted bimanual cloth-folding expert, a
 [LeRobot](https://github.com/huggingface/lerobot) dataset converter, an ACT training recipe, and a
 closed-loop evaluation harness that serves the policy over a local socket while Isaac Sim runs the
@@ -296,6 +302,7 @@ the fold is executed.
 | **Default** (training data) | `./python.sh 02_collect_franka.py --headless --out dataset_raw` | single fold, lift/arc/place, 2 cm release height |
 | **Old** | `... --line-pin --double-fold --place-z 0.012` | lift 10–14 cm, arc over, pins once per control step |
 | **New** | `... --line-pin --double-fold --pin-substeps --drag-fold --place-z 0.012` | low ~4 cm lift, rolling descent, pins every physics substep |
+| **New (demo GIF)** | Same as **New** above | *See the demo GIF above the repository gallery.* |
 
 The **reference ACT checkpoint was trained on the default single-fold data**, and the eval uses
 defaults. If you collect with different flags, train on the matching distribution.
